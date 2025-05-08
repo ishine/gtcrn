@@ -3,13 +3,18 @@ This repository is the official implementation of the ICASSP2024 paper: [GTCRN: 
 
 Audio examples are available at [Audio examples of GTCRN](https://htmlpreview.github.io/?https://github.com/Xiaobin-Rong/gtcrn_demo/blob/main/index.html).
 
+## 🔥 News
+- [**2025-3-13**] A quick inference web is built thanks to [Fangjun Kuang](https://github.com/csukuangfj), see in [web](https://huggingface.co/spaces/k2-fsa/wasm-speech-enhancement-gtcrn).
+- [**2025-3-10**] Now GTCRN is supported by [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) thanks to [Fangjun Kuang](https://github.com/csukuangfj), see [here](https://github.com/k2-fsa/sherpa-onnx/pull/1977).
+- [**2025-3-05**] An improved ultra-lightweight SE model named **UL-UNAS** is proposed, see in [repo](https://github.com/Xiaobin-Rong/ul-unas) and [arxiv](https://arxiv.org/abs/2503.00340).
+
 ## About GTCRN
-Grouped Temporal Convolutional Recurrent Network (GTCRN) is a speech enhancement model requiring ultralow computational resources, featuring only **23.7 K** parameters and **33.0 MMACs** per second.
+Grouped Temporal Convolutional Recurrent Network (GTCRN) is a speech enhancement model requiring ultralow computational resources, featuring only **48.2 K** parameters and **33.0 MMACs** per second.
 Experimental results show that our proposed model not only surpasses RNNoise, a typical lightweight model with similar computational burden, 
 but also achieves competitive performance when compared to recent baseline models with significantly higher computational resources requirements.
 
 Note:
-* Although the complexity mentioned in the paper is **39.6 MMACs** per second, we find that it can be further reduced to **33.0 MMACs** per second. This reduction can be achieved by modifying only the ERB module, specifically by substituting the invariant mapping from linear bands to ERB bands in the low-frequency dimension, from matrix multiplication to simple concatenation.
+* The complexity reported in the paper is **23.7K** parameters and **39.6 MMACs** per second; however, we update these values to **48.2K** parameters and **33.0 MMACs** per second here. This modification is due to the inclusion of the ERB module. When accounting for the parameters of the ERB module (even though they are unlearnable), the parameter count increases to 48.2K. By replacing the invariant mapping from linear bands to ERB bands in the low-frequency dimension with simple concatenation instead of matrix multiplication, the MACs per second are reduced to 33 MMACs.
 * The explicit feature rearrangement layer in the grouped RNN, which is implemented by feature shuffle, can result in an unstreamable model. Therefore, we discard it and implicitly achieve feature rearrangement through the following FC layer in the DPGRNN.
 
 ## Performance
@@ -23,7 +28,7 @@ Experiments show that GTCRN not only outperforms RNNoise by a substantial margin
 |PercepNet (2020)|8.00|0.80|-|2.73|-|
 |DeepFilterNet (2022)|1.80|0.35|16.63|2.81|**0.942**|
 |S-DCCRN (2022)|2.34|-|-|2.84|0.940|
-|GTCRN (proposed)|**0.02**|**0.04**|**18.83**|**2.87**|0.940|
+|GTCRN (proposed)|**0.05**|**0.03**|**18.83**|**2.87**|0.940|
 <br>
 
 **Table 2**: Performance on DNS3 blind test set.
@@ -32,7 +37,7 @@ Experiments show that GTCRN not only outperforms RNNoise by a substantial margin
 |Noisy|-|-|2.96|2.65|**3.20**|2.33|
 |RNNoise (2018)|0.06|0.04|3.15|3.45|3.00|2.53|
 |S-DCCRN (2022)|2.34|-|3.43|-|-|-|
-|GTCRN (proposed)|**0.02**|**0.04**|**3.44**|**3.90**|3.00|**2.70**|
+|GTCRN (proposed)|**0.05**|**0.03**|**3.44**|**3.90**|3.00|**2.70**|
 
 ## Pre-trained Models
 Pre-trained models are provided in `checkpoints` folder, which were trained on DNS3 and VCTK-DEMAND datasets, respectively.
